@@ -5,4 +5,5 @@ data class Organization(var uid: String = "",
                 var contact_name: String = "",
                 var type: String = "",    //either "Restaurant" or "Pantry"
                 var address: String = "",
-                var description: String = "")
+                var short_description: String = "",
+                var long_description: String)

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:orientation="vertical"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ScrollView android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:orientation="vertical"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+            <TextView
+                    android:id="@+id/headerTv"
+                    android:textSize="20sp"
+                    android:text="Please provide some additional information for your"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            <EditText
+                    android:id="@+id/orgNameEt"
+                    android:hint="Name of your"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            <EditText
+                    android:id="@+id/contactNameEt"
+                    android:hint="Contact name (first and last)"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            <EditText
+                    android:id="@+id/addressEt"
+                    android:hint="Address of your"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            <TextView
+                    android:paddingTop="20dp"
+                    android:textSize="20sp"
+                    android:id="@+id/shortDescriptionTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            <EditText
+                    android:id="@+id/shortDescriptionEt"
+                    android:hint="Canned goods, snacks, bread..."
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            <TextView
+                    android:paddingTop="20dp"
+                    android:textSize="20sp"
+                    android:id="@+id/longDescriptionTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            <EditText
+                    android:lines="20"
+                    android:minLines="5"
+                    android:id="@+id/longDescriptionEt"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            <CheckBox
+                    android:checked="true"
+                    android:text="Make profile visible"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            <Button
+                    android:text="Finished"
+                    android:id="@+id/finishedBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
