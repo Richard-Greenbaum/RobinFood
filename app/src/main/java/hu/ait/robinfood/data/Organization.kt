@@ -1,9 +1,10 @@
 package hu.ait.robinfood.data
 
 data class Organization(var uid: String = "",
-                var org_name: String = "",
-                var contact_name: String = "",
+                var orgName: String = "",
+                var contactName: String = "",
                 var type: String = "",    //either "Restaurant" or "Pantry"
                 var address: String = "",
-                var short_description: String = "",
-                var long_description: String)
+                var shortDescription: String = "",
+                var longDescription: String = "",
+                var visible: Boolean = true)

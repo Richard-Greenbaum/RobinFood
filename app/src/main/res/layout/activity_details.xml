@@ -76,6 +76,7 @@
                     android:layout_height="match_parent"/>
 
             <CheckBox
+                    android:id="@+id/visibleCb"
                     android:checked="true"
                     android:text="Make profile visible"
                     android:layout_width="match_parent"

@@ -3,7 +3,13 @@ package hu.ait.robinfood
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
+import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import hu.ait.robinfood.data.Organization
 import kotlinx.android.synthetic.main.activity_details.*
+import kotlinx.android.synthetic.main.row_org.*
 
 class DetailsActivity : AppCompatActivity() {
 
@@ -12,6 +18,9 @@ class DetailsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
+
+        Log.d("dddd", "eeee")
+
 
         if (intent.extras.containsKey("TYPE")) {
             type = intent.getStringExtra("TYPE")
@@ -32,6 +41,7 @@ class DetailsActivity : AppCompatActivity() {
         }
 
         finishedBtn.setOnClickListener {
+            Log.d("dddd", "qqqq")
             var ok = true
             if (!orgNameEt.text.isNotEmpty()) {
                 orgNameEt.error = "This field cannot be empty"
@@ -51,13 +61,48 @@ class DetailsActivity : AppCompatActivity() {
             }
 
             if (ok) {
+                uploadOrg()
                 var intentDetails = Intent()
-                intentDetails.setClass(this@DetailsActivity, PostsActivity::class.java)
+                intentDetails.setClass(this@DetailsActivity, OrgsActivity::class.java)
                 startActivity(intentDetails)
             }
         }
 
 
 
+    }
+
+    fun uploadOrg() {
+        Log.d("dddd", "ssss")
+        val org = Organization(
+            FirebaseAuth.getInstance().currentUser!!.uid,
+            orgNameEt.text.toString(),
+            contactNameEt.text.toString(),
+            type,
+            addressEt.text.toString(),
+            shortDescriptionEt.text.toString(),
+            longDescriptionEt.text.toString(),
+            visibleCb.isChecked
+        )
+
+        var orgsCollection = FirebaseFirestore.getInstance().collection(
+            "orgs"
+        )
+
+        orgsCollection.document(FirebaseAuth.getInstance().currentUser!!.uid).set(
+            org
+        ).addOnSuccessListener {
+            Toast.makeText(
+                this@DetailsActivity,
+                "Org saved", Toast.LENGTH_LONG
+            ).show()
+
+            finish()
+        }.addOnFailureListener {
+            Toast.makeText(
+                this@DetailsActivity,
+                "Error: ${it.message}", Toast.LENGTH_LONG
+            ).show()
+        }
     }
 }

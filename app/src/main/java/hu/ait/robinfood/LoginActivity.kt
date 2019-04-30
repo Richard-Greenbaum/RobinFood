@@ -3,6 +3,7 @@ package hu.ait.robinfood
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
@@ -15,6 +16,9 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        Log.d("dog", "111")
+
     }
 
 
@@ -51,7 +55,7 @@ class LoginActivity : AppCompatActivity() {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(
             etEmail.text.toString(), etPassword.text.toString()
         ).addOnSuccessListener {
-            startActivity(Intent(this@LoginActivity, PostsActivity::class.java))
+            startActivity(Intent(this@LoginActivity, OrgsActivity::class.java))
 
             Toast.makeText(this@LoginActivity,
                 "Login OK", Toast.LENGTH_LONG).show()
