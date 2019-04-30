@@ -35,17 +35,13 @@ class OrgsAdapter(
     override fun getItemCount() = orgsList.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val (orgName, contactName, type, address, shortDescription,
-            longDescription) = orgsList[holder.adapterPosition]
+        val (uid, orgName, contactName, type, address, shortDescription,
+            longDescription, visible) = orgsList[holder.adapterPosition]
 
         holder.orgNameTv.text = orgName
         holder.orgAddressTv.text = address
         holder.shortDescriptionTv2.text = shortDescription
 
-
-
-
-//        setAnimation(holder.itemView, position)
     }
 
     fun addOrg(org: Organization, key: String) {
@@ -73,16 +69,6 @@ class OrgsAdapter(
         }
     }
 
-//    private fun setAnimation(viewToAnimate: View, position: Int) {
-//        if (position > lastPosition) {
-//            val animation = AnimationUtils.loadAnimation(
-//                context,
-//                android.R.anim.slide_in_left
-//            )
-//            viewToAnimate.startAnimation(animation)
-//            lastPosition = position
-//        }
-//    }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         //        val imageVw: ImageView = itemView.imageVw

@@ -19,8 +19,6 @@ class DetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
 
-        Log.d("dddd", "eeee")
-
 
         if (intent.extras.containsKey("TYPE")) {
             type = intent.getStringExtra("TYPE")
@@ -41,7 +39,6 @@ class DetailsActivity : AppCompatActivity() {
         }
 
         finishedBtn.setOnClickListener {
-            Log.d("dddd", "qqqq")
             var ok = true
             if (!orgNameEt.text.isNotEmpty()) {
                 orgNameEt.error = "This field cannot be empty"
@@ -73,7 +70,6 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     fun uploadOrg() {
-        Log.d("dddd", "ssss")
         val org = Organization(
             FirebaseAuth.getInstance().currentUser!!.uid,
             orgNameEt.text.toString(),

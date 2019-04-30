@@ -58,39 +58,31 @@ class OrgsActivity : AppCompatActivity() {
 
         recyclerOrgs.adapter = orgsAdapter
 
-        initOrgs()
     }
 
     inner class MyThread : Thread() {
         override fun run() {
-            Log.d("hello", "cvb")
             val db = FirebaseFirestore.getInstance()
-            Log.d("hello", "1")
 
             val privateDataRef = db.collection("orgs").document(
                 FirebaseAuth.getInstance().currentUser!!.uid)
-//            val privateDataRef = db.collection("orgs").document(
-//                "zkToEiGwHRW6Iv854Y76")
-            Log.d("hello", privateDataRef.toString())
 
             val document = Tasks.await(privateDataRef.get())
             Log.d("hello", document.toString())
 
             if (document.exists()) {
-                Log.d("hello", "found")
                 //Cast the given DocumentSnapshot to our POJO class
                 userOrg = document.toObject(Organization::class.java)!!
             } else null
 
-            Log.d("hello", userOrg.toString())
             display_type = if (userOrg!!.type == "Restaurant") "Food pantry" else "Restaurant"
-            Log.d("hello", "2")
+            initOrgs()
 
         }
     }
 
     private fun initOrgs() {
-        Log.d("hello", "ititititit")
+        Log.d("hello", display_type)
 
         val db = FirebaseFirestore.getInstance()
 
@@ -98,14 +90,13 @@ class OrgsActivity : AppCompatActivity() {
             "visible", true
         )
 
-        Log.d("hello", "hjhjhjhj")
-
 
 
 
         var allOrgsListener = query.addSnapshotListener(
             object: EventListener<QuerySnapshot> {
                 override fun onEvent(querySnapshot: QuerySnapshot?, e: FirebaseFirestoreException?) {
+                    Log.d("hello", "event")
                     if (e != null) {
                         Toast.makeText(this@OrgsActivity, "listen error: ${e.message}", Toast.LENGTH_LONG).show()
                         return
@@ -144,31 +135,18 @@ class OrgsActivity : AppCompatActivity() {
         return true
     }
 
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        when (item.itemId) {
-//            R.id.action_settings -> return true
-//            else -> return super.onOptionsItemSelected(item)
-//        }
-//    }
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == R.id.nav_logout) {
+            FirebaseAuth.getInstance().signOut()
+            finish()
+        } else if (item?.itemId == R.id.nav_edit_profile) {
+            //Maitreyi writes some super cool code here
+        }
 
-//    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-//        // Handle navigation view item clicks here.
-//        when (item.itemId) {
-//            R.id.nav_logout -> {
-//                FirebaseAuth.getInstance().signOut()
-//                finish()
-//            }
-//        }
-//        when (item.itemId) {
-//            R.id.nav_edit_profile -> {
-//                //Maitreyi writes some super cool code here
-//            }
-//        }
-//
-////        drawer_layout.closeDrawer(GravityCompat.START)
-//        return true
-//    }
+        return super.onOptionsItemSelected(item)
+    }
+
+
+
+
 }
