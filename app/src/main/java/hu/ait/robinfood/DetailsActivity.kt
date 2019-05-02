@@ -24,7 +24,7 @@ class DetailsActivity : AppCompatActivity() {
             type = intent.getStringExtra("TYPE")
             if (type == "Restaurant") {
                 headerTv.text = "${headerTv.text} restaurant"
-                orgNameEt.hint = "${orgNameEt.hint} restaurant"
+                orgNameEt.hint = "Name of your restaurant"
                 addressEt.hint = "${addressEt.hint} restaurant"
                 shortDescriptionTv.text = "Please provide a list of items your restaurant is able to donate"
                 longDescriptionTv.text = "Provide any additional information you wish to share about your restaurant here"

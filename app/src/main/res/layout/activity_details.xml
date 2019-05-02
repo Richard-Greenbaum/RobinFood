@@ -30,17 +30,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
 
+
             <EditText
+                    android:hint="Name of"
                     android:id="@+id/orgNameEt"
-                    android:hint="Name of your"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
 
+
             <EditText
-                    android:id="@+id/contactNameEt"
-                    android:hint="Contact name (first and last)"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                        android:id="@+id/contactNameEt"
+                        android:hint="Contact name (first and last)"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+
+
 
             <EditText
                     android:id="@+id/addressEt"
@@ -48,12 +52,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
 
+
             <TextView
                     android:paddingTop="20dp"
                     android:textSize="20sp"
                     android:id="@+id/shortDescriptionTv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
+
 
             <EditText
                     android:id="@+id/shortDescriptionEt"
@@ -70,7 +76,7 @@
 
             <EditText
                     android:lines="20"
-                    android:minLines="5"
+                    android:minLines="3"
                     android:id="@+id/longDescriptionEt"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>

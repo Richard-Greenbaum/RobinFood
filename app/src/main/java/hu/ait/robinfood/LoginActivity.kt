@@ -6,8 +6,11 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.FirebaseFirestore
+import hu.ait.robinfood.data.Organization
 import kotlinx.android.synthetic.main.activity_login.*
 
 
@@ -46,6 +49,24 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    inner class MyThread : Thread() {
+        override fun run() {
+            val db = FirebaseFirestore.getInstance()
+
+            val privateDataRef = db.collection("orgs").document(
+                FirebaseAuth.getInstance().currentUser!!.uid
+            )
+
+            val document = Tasks.await(privateDataRef.get())
+
+            if (document.exists()) {
+                startActivity(Intent(this@LoginActivity, OrgsActivity::class.java))
+            } else {
+                startActivity(Intent(this@LoginActivity, OrgTypeActivity::class.java))
+            }
+        }
+    }
+
     fun loginClick(v: View){
         if (!isFormValid()){
             return
@@ -54,7 +75,7 @@ class LoginActivity : AppCompatActivity() {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(
             etEmail.text.toString(), etPassword.text.toString()
         ).addOnSuccessListener {
-            startActivity(Intent(this@LoginActivity, OrgsActivity::class.java))
+            MyThread().start()
 
             Toast.makeText(this@LoginActivity,
                 "Login OK", Toast.LENGTH_LONG).show()

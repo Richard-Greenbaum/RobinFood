@@ -68,7 +68,6 @@ class OrgsActivity : AppCompatActivity() {
                 FirebaseAuth.getInstance().currentUser!!.uid)
 
             val document = Tasks.await(privateDataRef.get())
-            Log.d("hello", document.toString())
 
             if (document.exists()) {
                 //Cast the given DocumentSnapshot to our POJO class
@@ -82,8 +81,6 @@ class OrgsActivity : AppCompatActivity() {
     }
 
     private fun initOrgs() {
-        Log.d("hello", display_type)
-
         val db = FirebaseFirestore.getInstance()
 
         val query = db.collection("orgs").whereEqualTo("type", display_type).whereEqualTo(
