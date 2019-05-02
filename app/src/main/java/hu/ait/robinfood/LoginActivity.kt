@@ -75,6 +75,7 @@ class LoginActivity : AppCompatActivity() {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(
             etEmail.text.toString(), etPassword.text.toString()
         ).addOnSuccessListener {
+
             MyThread().start()
 
             Toast.makeText(this@LoginActivity,
