@@ -33,21 +33,6 @@ class OrgsActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         MyThread().start()
 
-//        fab.setOnClickListener { view ->
-//            startActivity(
-//                Intent(this@ForumActivity,
-//                    CreatePostActivity::class.java)
-//            )
-//        }
-
-//        val toggle = ActionBarDrawerToggle(
-//            this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
-//        )
-//        drawer_layout.addDrawerListener(toggle)
-//        toggle.syncState()
-
-//        nav_view.setNavigationItemSelectedListener(this)
-
         orgsAdapter = OrgsAdapter(this,
             FirebaseAuth.getInstance().currentUser!!.uid)
 
@@ -70,7 +55,7 @@ class OrgsActivity : AppCompatActivity() {
             val document = Tasks.await(privateDataRef.get())
 
             if (document.exists()) {
-                //Cast the given DocumentSnapshot to our POJO class
+                //Cast the given DocumentSnapshot to our Organization class
                 userOrg = document.toObject(Organization::class.java)!!
             } else null
 
