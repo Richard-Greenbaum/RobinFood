@@ -59,9 +59,9 @@ class OrgsAdapter(
         holder.orgAddressTv.text = context.resources.getString(R.string.row_address_tv, address)
 
         if (type == context.resources.getString(R.string.restaurant)) {
-            holder.shortDescriptionTv2.text = context.resources.getString(R.string.row_description_tv, "Accepted", shortDescription)
-        } else {
             holder.shortDescriptionTv2.text = context.resources.getString(R.string.row_description_tv, "Available", shortDescription)
+        } else {
+            holder.shortDescriptionTv2.text = context.resources.getString(R.string.row_description_tv, "Accepted", shortDescription)
         }
         holder.entireView.setOnClickListener {
             initProfileDetailsDialog(holder, context as OrgsActivity)
