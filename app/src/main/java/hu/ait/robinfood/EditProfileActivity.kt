@@ -12,7 +12,20 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import hu.ait.robinfood.data.Organization
+import kotlinx.android.synthetic.main.activity_details.*
 import kotlinx.android.synthetic.main.activity_edit_profile.*
+import kotlinx.android.synthetic.main.activity_edit_profile.addressEt
+import kotlinx.android.synthetic.main.activity_edit_profile.btnUploadPhoto
+import kotlinx.android.synthetic.main.activity_edit_profile.contactNameEt
+import kotlinx.android.synthetic.main.activity_edit_profile.finishedBtn
+import kotlinx.android.synthetic.main.activity_edit_profile.headerTv
+import kotlinx.android.synthetic.main.activity_edit_profile.longDescriptionEt
+import kotlinx.android.synthetic.main.activity_edit_profile.orgNameEt
+import kotlinx.android.synthetic.main.activity_edit_profile.orgPhoto
+import kotlinx.android.synthetic.main.activity_edit_profile.shortDescriptionEt
+import kotlinx.android.synthetic.main.activity_edit_profile.shortDescriptionTv
+import kotlinx.android.synthetic.main.activity_edit_profile.visibleCb
+import kotlinx.android.synthetic.main.activity_edit_profile.websiteEt
 
 class EditProfileActivity : AppCompatActivity() {
 
@@ -59,6 +72,15 @@ class EditProfileActivity : AppCompatActivity() {
                     websiteEt.setText(userOrg.website)
                     shortDescriptionEt.setText(userOrg.shortDescription)
                     longDescriptionEt.setText(userOrg.longDescription)
+
+                    if (userOrg.type == "restaurant") {
+                        shortDescriptionTv.text = resources.getString(R.string.details_activity_sd_text,
+                            "your restaurant is able to donate")
+                    }
+                    if (userOrg.type == "food pantry") {
+                        shortDescriptionTv.text = resources.getString(R.string.details_activity_sd_text,
+                            "your food pantry is willing to accept")
+                    }
 
                     if (userOrg.image != "") {
                         val imgView = orgPhoto

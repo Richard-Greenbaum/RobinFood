@@ -16,7 +16,7 @@ import com.google.firebase.storage.FirebaseStorage
 class DetailsActivity : AppCompatActivity() {
 
     private lateinit var type : String
-    private lateinit var imageField : String
+    private var imageField = ""
 
     companion object {
         const val REQUEST_CODE = 987
@@ -34,11 +34,11 @@ class DetailsActivity : AppCompatActivity() {
             addressEt.hint = resources.getString(R.string.details_activity_address, type)
 
             if (type == "restaurant") {
-                shortDescriptionTv.text = resources.getString(R.string.details_activity_header,
+                shortDescriptionTv.text = resources.getString(R.string.details_activity_sd_text,
                     "your restaurant is able to donate")
             }
             if (type == "food pantry") {
-                shortDescriptionTv.text = resources.getString(R.string.details_activity_header,
+                shortDescriptionTv.text = resources.getString(R.string.details_activity_sd_text,
                     "your food pantry is willing to accept")
             }
         }
