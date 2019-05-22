@@ -29,7 +29,7 @@
     <string name="details_activity_website">Website Link (optional)</string>
     <string name="details_activity_sd_text">Please provide a list of goods %1$s:</string>
     <string name="details_activity_ld_text">Please provide any additional information you wish to share:</string>
-    <string name="details_activity_sd_hint">Canned goods, snacks, bread (…, &#8230;)</string>
+    <string name="details_activity_sd_hint">Canned goods, snacks, bread&#8230;</string>
     <string name="details_activity_visible">Make Profile Visible</string>
     <string name="details_activity_finished">Finished</string>
 
@@ -45,6 +45,6 @@
     <string name="edit_profile_title">Edit any details below</string>
     <string name="email_uri">mailto: %1$s?&amp;subject=Everybody Eats: Request to Connect</string>
     <string name="email_failed_msg">No email application available on device</string>
-    <string name="header_text_foodpantry">Food pantries to connect with</string>
-    <string name="header_text_restaurant">Restaurants to connect with</string>
+    <string name="header_text_foodpantry">Food Pantries to Connect With</string>
+    <string name="header_text_restaurant">Restaurants to Connect With</string>
 </resources>

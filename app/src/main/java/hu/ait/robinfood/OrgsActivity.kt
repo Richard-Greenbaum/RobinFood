@@ -19,7 +19,6 @@ class OrgsActivity : AppCompatActivity() {
 
     lateinit var orgsAdapter: OrgsAdapter
     lateinit var userOrg: Organization
-
     lateinit var displayType : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,8 +28,7 @@ class OrgsActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         MyThread().start()
 
-        orgsAdapter = OrgsAdapter(this,
-            FirebaseAuth.getInstance().currentUser!!.uid)
+        orgsAdapter = OrgsAdapter(this)
 
         val layoutManager = LinearLayoutManager(this)
         layoutManager.reverseLayout = true
@@ -38,7 +36,6 @@ class OrgsActivity : AppCompatActivity() {
         recyclerOrgs.layoutManager = layoutManager
 
         recyclerOrgs.adapter = orgsAdapter
-
     }
 
     inner class MyThread : Thread() {
@@ -107,11 +104,12 @@ class OrgsActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         FirebaseAuth.getInstance().signOut()
-        super.onBackPressed()
+        val backIntent = Intent(applicationContext, LoginActivity::class.java)
+        backIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        startActivity(backIntent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.activity_orgs_menu, menu)
         return true
     }

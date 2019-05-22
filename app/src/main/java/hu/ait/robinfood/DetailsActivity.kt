@@ -26,6 +26,18 @@ class DetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
 
+        initTextViewFields()
+
+        btnUploadPhoto.setOnClickListener {
+            initUploadImage()
+        }
+
+        finishedBtn.setOnClickListener {
+            checkValidDetails()
+        }
+    }
+
+    private fun initTextViewFields() {
         if (intent?.extras!!.containsKey("TYPE")) {
             type = intent.getStringExtra("TYPE")
 
@@ -34,21 +46,17 @@ class DetailsActivity : AppCompatActivity() {
             addressEt.hint = resources.getString(R.string.details_activity_address, type)
 
             if (type == "restaurant") {
-                shortDescriptionTv.text = resources.getString(R.string.details_activity_sd_text,
-                    "your restaurant is able to donate")
+                shortDescriptionTv.text = resources.getString(
+                    R.string.details_activity_sd_text,
+                    "your restaurant is able to donate"
+                )
             }
             if (type == "food pantry") {
-                shortDescriptionTv.text = resources.getString(R.string.details_activity_sd_text,
-                    "your food pantry is willing to accept")
+                shortDescriptionTv.text = resources.getString(
+                    R.string.details_activity_sd_text,
+                    "your food pantry is willing to accept"
+                )
             }
-        }
-
-        btnUploadPhoto.setOnClickListener {
-            initUploadImage()
-        }
-
-        finishedBtn.setOnClickListener {
-            checkValidDetails()
         }
     }
 
@@ -64,13 +72,13 @@ class DetailsActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 REQUEST_CODE -> {
-                    var data = data?.data!!
-                    imageField = data.lastPathSegment!!
-                    orgPhoto.setImageURI(data)
+                    var imageData = data?.data!!
+                    imageField = imageData.lastPathSegment!!
+                    orgPhoto.setImageURI(imageData)
 
                     val storageRef = FirebaseStorage.getInstance().reference
                     val imageRef = storageRef.child(imageField)
-                    val uploadTask = imageRef.putFile(data)
+                    val uploadTask = imageRef.putFile(imageData)
 
                     uploadTask.addOnSuccessListener {
                         Log.d("IMAGE_UPLOAD", "success")
@@ -102,14 +110,15 @@ class DetailsActivity : AppCompatActivity() {
         }
 
         if (ok) {
-            uploadOrg()
+            val org = createOrg()
+            addOrgToDatabase(org)
             var intentDetails = Intent()
             intentDetails.setClass(this@DetailsActivity, OrgsActivity::class.java)
             startActivity(intentDetails)
         }
     }
 
-    private fun uploadOrg() {
+    private fun createOrg() : Organization {
         val org = Organization(
             FirebaseAuth.getInstance().currentUser!!.uid,
             orgNameEt.text.toString(),
@@ -123,8 +132,10 @@ class DetailsActivity : AppCompatActivity() {
             websiteEt.text.toString(),
             imageField
         )
+        return org
+    }
 
-
+    private fun addOrgToDatabase(org : Organization) {
         var orgsCollection = FirebaseFirestore.getInstance().collection("orgs")
 
         orgsCollection.document(FirebaseAuth.getInstance().currentUser!!.uid).set(org)
@@ -142,4 +153,5 @@ class DetailsActivity : AppCompatActivity() {
              ).show()
             }
     }
+
 }

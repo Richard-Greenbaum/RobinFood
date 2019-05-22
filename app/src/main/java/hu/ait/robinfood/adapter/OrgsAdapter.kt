@@ -18,16 +18,13 @@ import hu.ait.robinfood.R
 import hu.ait.robinfood.data.Organization
 import kotlinx.android.synthetic.main.row_org.view.*
 
-class OrgsAdapter(
-
-    private val context: Context,
-    private val uId: String) : RecyclerView.Adapter<OrgsAdapter.ViewHolder>() {
+class OrgsAdapter(private val context: Context) : RecyclerView.Adapter<OrgsAdapter.ViewHolder>() {
 
     private var orgsList = mutableListOf<Organization>()
     private var orgKeys = mutableListOf<String>()
 
     companion object {
-        val KEY_ORG_DETAILS = "KEY_ORG_DETAILS"
+        const val KEY_ORG_DETAILS = "KEY_ORG_DETAILS"
     }
 
     private var lastPosition = -1
@@ -45,26 +42,39 @@ class OrgsAdapter(
         val (uid, orgName, contactName, type, address, emailAddress, shortDescription,
             longDescription, visible, website, image) = orgsList[holder.adapterPosition]
 
-        if (image != "") {
-            var imgRef = FirebaseStorage.getInstance().reference.child(image)
-            GlideApp.with(context as OrgsActivity)
-                .load(imgRef).into(holder.imageVw)
-        } else if (type == context.resources.getString(R.string.restaurant)) {
-            holder.imageVw.setImageResource(R.drawable.ic_fp)
-        } else {
-            holder.imageVw.setImageResource(R.drawable.ic_r)
+        setProfileImage(image, holder, type)
+
+        setTextViews(holder, orgName, address, type, shortDescription)
+
+        holder.entireView.setOnClickListener {
+            initProfileDetailsDialog(holder, context as OrgsActivity)
         }
+    }
+
+    private fun setTextViews(holder: ViewHolder, orgName: String, address: String,
+        type: String, shortDescription: String) {
 
         holder.orgNameTv.text = orgName
         holder.orgAddressTv.text = context.resources.getString(R.string.row_address_tv, address)
 
         if (type == context.resources.getString(R.string.restaurant)) {
-            holder.shortDescriptionTv2.text = context.resources.getString(R.string.row_description_tv, "Available", shortDescription)
+            holder.shortDescriptionTv2.text =
+                context.resources.getString(R.string.row_description_tv, "Available", shortDescription)
         } else {
-            holder.shortDescriptionTv2.text = context.resources.getString(R.string.row_description_tv, "Accepted", shortDescription)
+            holder.shortDescriptionTv2.text =
+                context.resources.getString(R.string.row_description_tv, "Accepted", shortDescription)
         }
-        holder.entireView.setOnClickListener {
-            initProfileDetailsDialog(holder, context as OrgsActivity)
+    }
+
+    private fun setProfileImage(image: String, holder: ViewHolder, type: String) {
+        if (image != "") {
+            var imgRef = FirebaseStorage.getInstance().reference.child(image)
+            GlideApp.with(context as OrgsActivity)
+                .load(imgRef).into(holder.imageVw)
+        } else if (type == context.resources.getString(R.string.restaurant)) {
+            holder.imageVw.setImageResource(R.drawable.ic_r)
+        } else {
+            holder.imageVw.setImageResource(R.drawable.ic_fp)
         }
     }
 

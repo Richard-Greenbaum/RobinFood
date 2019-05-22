@@ -23,13 +23,7 @@ import kotlinx.android.synthetic.main.dialog_profile_details.*
 
 class ProfileDetailsDialog : DialogFragment() {
 
-    private lateinit var profileName: TextView
-    private lateinit var profileContact: TextView
-    private lateinit var profileAddress: TextView
-    private lateinit var profileShortDes: TextView
-    private lateinit var profileLongDes: TextView
-    private lateinit var emailAddress: TextView
-    private lateinit var btnEmail: ImageView
+    private lateinit var organization: Organization
     private lateinit var btnWebsite: ImageView
     private lateinit var profileImage: ImageView
 
@@ -44,79 +38,75 @@ class ProfileDetailsDialog : DialogFragment() {
 
         builder.setView(rootView)
 
-        setTextViewFields(rootView)
+        getOrganization()
+        setRootViewFields(rootView)
 
-        builder.setNeutralButton(resources.getString(R.string.dialog_close)) { dialog, which ->
-            dialog.dismiss()
-        }
+        builder.setNeutralButton(resources.getString(R.string.dialog_close)) { dialog, which -> dialog.dismiss() }
 
         return builder.create()
     }
 
-    private fun setTextViewFields(rootView: View) {
-        profileName = rootView.profileName
-        profileAddress = rootView.profileAddress
-        profileContact = rootView.profileContact
-        profileShortDes = rootView.profileShortDescription
-        profileLongDes = rootView.profileLongDescription
-        emailAddress = rootView.emailAddress
-        btnEmail = rootView.btnEmail
-        btnWebsite = rootView.btnWebsite
-        profileImage = rootView.profileImage
-
+    private fun getOrganization() {
         val arguments = this.arguments
 
         if (arguments != null && arguments.containsKey(
                 OrgsAdapter.KEY_ORG_DETAILS)) {
+            organization = arguments.getSerializable(OrgsAdapter.KEY_ORG_DETAILS) as Organization
+        }
+    }
 
-            val organization = arguments.getSerializable(OrgsAdapter.KEY_ORG_DETAILS) as Organization
+    private fun setRootViewFields(rootView: View) {
+        rootView.profileName.text = organization.orgName
+        rootView.profileAddress.text = organization.address
+        rootView.profileContact.text = organization.contactName
+        rootView.profileShortDescription.text = organization.shortDescription
+        rootView.profileLongDescription.text = organization.longDescription
+        rootView.profileEmail.text = organization.emailAddress
+        rootView.profileWebsite.text = organization.website
+        profileImage = rootView.profileImage
+        btnWebsite = rootView.btnWebsite
 
-            profileName.text = organization.orgName
-            profileAddress.text = organization.address
-            profileContact.text = organization.contactName
-            profileShortDes.text = organization.shortDescription
-            profileLongDes.text = organization.longDescription
-            emailAddress.text = organization.emailAddress
+        if (organization.image != "") {
+            var imgRef = FirebaseStorage.getInstance().reference.child(organization.image)
+            GlideApp.with(this.context!!)
+                .load(imgRef).into(profileImage)
+        } else {
+            profileImage.visibility = View.GONE
+        }
 
-            if (organization.image != "") {
-                var imgRef = FirebaseStorage.getInstance().reference.child(organization.image)
-                GlideApp.with(this.context!!)
-                    .load(imgRef).into(profileImage)
-            } else {
-                profileImage.visibility = View.GONE
-            }
+        rootView.btnEmail.setOnClickListener {
+            emailButtonOnClickIntent()
+        }
 
-            btnEmail.setOnClickListener {
-                Log.d("email", "hello")
+        initWebsiteButtonIntent()
+    }
 
-                val emailIntent = Intent(Intent.ACTION_SENDTO)
-                Log.d("email", organization.toString())
-                val email = organization.emailAddress
-                Log.d("email", organization.emailAddress)
-                emailIntent.data = Uri.parse(resources.getString(R.string.email_uri, email))
+    private fun emailButtonOnClickIntent() {
+        val emailIntent = Intent(Intent.ACTION_SENDTO)
+        val email = organization.emailAddress
+        emailIntent.data = Uri.parse(resources.getString(R.string.email_uri, email))
+        try {
+            startActivity(emailIntent)
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(
+                context as OrgsActivity, resources.getString(R.string.email_failed_msg), Toast.LENGTH_LONG
+            ).show()
+        }
+    }
 
-                try {
-                    startActivity(emailIntent)
-                } catch (e: ActivityNotFoundException) {
-                    Toast.makeText(
-                        context as OrgsActivity, resources.getString(R.string.email_failed_msg), Toast.LENGTH_LONG
-                    ).show()
+    private fun initWebsiteButtonIntent() {
+        if (organization.website != "") {
+            btnWebsite.setOnClickListener {
+                val websiteIntent = Intent(Intent.ACTION_VIEW)
+                var website = organization.website
+                if (!website.startsWith("https://") && !website.startsWith("http://")) {
+                    website = "http://$website"
                 }
+                websiteIntent.data = Uri.parse(website)
+                startActivity(websiteIntent)
             }
-
-            if (organization.website != "") {
-                btnWebsite.setOnClickListener {
-                    val websiteIntent = Intent(Intent.ACTION_VIEW)
-                    var website = organization.website
-                    if (!website.startsWith("https://") && !website.startsWith("http://")) {
-                        website = "http://$website"
-                    }
-                    websiteIntent.data = Uri.parse(website)
-                    startActivity(websiteIntent)
-                }
-            } else {
-                btnWebsite.visibility = View.GONE
-            }
+        } else {
+            btnWebsite.visibility = View.GONE
         }
     }
 

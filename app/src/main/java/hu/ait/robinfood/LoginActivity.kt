@@ -35,9 +35,9 @@ class LoginActivity : AppCompatActivity() {
                     .setDisplayName(userNameFromEmail(user.email!!))
                     .build()
             )
-
             Toast.makeText(this@LoginActivity,
                 resources.getString(R.string.register_success), Toast.LENGTH_LONG).show()
+
             startActivity(Intent(this@LoginActivity, OrgTypeActivity::class.java))
         }.addOnFailureListener{
             Toast.makeText(this@LoginActivity,
@@ -50,8 +50,7 @@ class LoginActivity : AppCompatActivity() {
             val db = FirebaseFirestore.getInstance()
 
             val privateDataRef = db.collection("orgs").document(
-                FirebaseAuth.getInstance().currentUser!!.uid
-            )
+                FirebaseAuth.getInstance().currentUser!!.uid)
 
             val document = Tasks.await(privateDataRef.get())
 
@@ -97,4 +96,5 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun userNameFromEmail(email: String) = email.substringBefore("@")
+
 }

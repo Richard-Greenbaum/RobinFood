@@ -60,47 +60,22 @@ class EditProfileActivity : AppCompatActivity() {
 
     private fun displayCurrentDetails(organization : DocumentReference) {
 
-        organization.get()
-            .addOnSuccessListener {document ->
+        organization.get().addOnSuccessListener {document ->
                 if (document.exists()) {
                     userOrg = document.toObject(Organization::class.java)!!
 
-                    headerTv.text = resources.getString(R.string.edit_details_activity_header)
-                    orgNameEt.setText(userOrg.orgName)
-                    contactNameEt.setText(userOrg.contactName)
-                    addressEt.setText(userOrg.address)
-                    websiteEt.setText(userOrg.website)
-                    shortDescriptionEt.setText(userOrg.shortDescription)
-                    longDescriptionEt.setText(userOrg.longDescription)
+                    setTextViewFields()
 
-                    if (userOrg.type == "restaurant") {
-                        shortDescriptionTv.text = resources.getString(R.string.details_activity_sd_text,
-                            "your restaurant is able to donate")
-                    }
-                    if (userOrg.type == "food pantry") {
-                        shortDescriptionTv.text = resources.getString(R.string.details_activity_sd_text,
-                            "your food pantry is willing to accept")
-                    }
-
-                    if (userOrg.image != "") {
-                        val imgView = orgPhoto
-                        val imgRef = FirebaseStorage.getInstance().reference.child(userOrg.image)
-                        GlideApp.with(applicationContext)
-                            .load(imgRef).into(imgView)
-                        btnDeletePhoto.visibility = View.VISIBLE
-                    }
-
+                    loadCurrentProfileImage()
                 }
-            }.addOnFailureListener{
-                Log.d("EXISTING_ORG", it.toString())
-            }
+        }
 
         btnUploadPhoto.setOnClickListener {
-            initUploadImage()
+            initUploadNewImage()
         }
 
         btnDeletePhoto.setOnClickListener {
-            deletePhoto()
+            deleteImage()
         }
 
         finishedBtn.setOnClickListener {
@@ -108,7 +83,43 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun initUploadImage() {
+    private fun setTextViewFields() {
+        headerTv.text = resources.getString(R.string.edit_details_activity_header)
+        orgNameEt.setText(userOrg.orgName)
+        contactNameEt.setText(userOrg.contactName)
+        addressEt.setText(userOrg.address)
+        websiteEt.setText(userOrg.website)
+        shortDescriptionEt.setText(userOrg.shortDescription)
+        longDescriptionEt.setText(userOrg.longDescription)
+        addressEt.hint = resources.getString(R.string.details_activity_address, userOrg.type)
+        orgNameEt.hint = resources.getString(R.string.details_activity_name, userOrg.type)
+        visibleCb.isChecked = userOrg.visible
+
+        if (userOrg.type == "restaurant") {
+            shortDescriptionTv.text = resources.getString(
+                R.string.details_activity_sd_text,
+                "your restaurant is able to donate"
+            )
+        }
+        if (userOrg.type == "food pantry") {
+            shortDescriptionTv.text = resources.getString(
+                R.string.details_activity_sd_text,
+                "your food pantry is willing to accept"
+            )
+        }
+    }
+
+    private fun loadCurrentProfileImage() {
+        if (userOrg.image != "") {
+            val imgView = orgPhoto
+            val imgRef = FirebaseStorage.getInstance().reference.child(userOrg.image)
+            GlideApp.with(applicationContext)
+                .load(imgRef).into(imgView)
+            btnDeletePhoto.visibility = View.VISIBLE
+        }
+    }
+
+    private fun initUploadNewImage() {
         val uploadPhotoIntent = Intent(Intent.ACTION_PICK)
         uploadPhotoIntent.type = "image/*"
         val mimeTypes = arrayListOf<String>("image/jpeg", "image/png")
@@ -120,13 +131,13 @@ class EditProfileActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 REQUEST_CODE_EDIT -> {
-                    val data = data?.data!!
-                    imageField = data.lastPathSegment!!
-                    orgPhoto.setImageURI(data)
+                    val imageData = data?.data!!
+                    imageField = imageData.lastPathSegment!!
+                    orgPhoto.setImageURI(imageData)
 
                     val storageRef = FirebaseStorage.getInstance().reference
                     val imageRef = storageRef.child(imageField)
-                    val uploadTask = imageRef.putFile(data)
+                    val uploadTask = imageRef.putFile(imageData)
 
                     uploadTask.addOnSuccessListener {
                         updateImage = true
@@ -139,19 +150,20 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun deletePhoto() {
+    private fun deleteImage() {
         val storageRef = FirebaseStorage.getInstance().reference
         val deleteRef = storageRef.child(userOrg.image)
         val deleteTask = deleteRef.delete()
 
-        deleteTask.addOnSuccessListener {
-            updateImage = true
-            orgPhoto.setImageDrawable(null)
-            btnDeletePhoto.visibility = View.GONE
-        }.addOnFailureListener {
-            Toast.makeText(this@EditProfileActivity,
-                resources.getString(R.string.delete_failed), Toast.LENGTH_LONG).show()
-        }
+        deleteTask
+            .addOnSuccessListener {
+                updateImage = true
+                orgPhoto.setImageDrawable(null)
+                btnDeletePhoto.visibility = View.GONE
+            }.addOnFailureListener {
+                Toast.makeText(this@EditProfileActivity,
+                    resources.getString(R.string.delete_failed), Toast.LENGTH_LONG).show()
+            }
 
         imageField = ""
     }
@@ -176,17 +188,16 @@ class EditProfileActivity : AppCompatActivity() {
         }
         if (ok) {
             updateOrgDetails(organization, updateImage)
-            var intentUpdateDone = Intent()
-            intentUpdateDone.setClass(this@EditProfileActivity, OrgsActivity::class.java)
-            startActivity(intentUpdateDone)
+            var intentFinishUpdating = Intent(this@EditProfileActivity, OrgsActivity::class.java)
+            startActivity(intentFinishUpdating)
         }
     }
-
 
     private fun updateOrgDetails(organization : DocumentReference, updateImage : Boolean) {
         if (updateImage) {
             organization.update("image", imageField)
         }
+
         organization.update(
             "orgName", orgNameEt.text.toString(),
             "contactName", contactNameEt.text.toString(),
