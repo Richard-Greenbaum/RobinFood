@@ -46,7 +46,6 @@
 
             <TextView
                     android:id="@+id/orgAddressTv"
-                    android:text="@string/row_address_tv"
                     android:textSize="14sp"
                     android:textStyle="italic"
                     android:layout_width="wrap_content"

@@ -62,9 +62,7 @@ class EditProfileActivity : AppCompatActivity() {
         organization.get().addOnSuccessListener {document ->
                 if (document.exists()) {
                     userOrg = document.toObject(Organization::class.java)!!
-
                     setTextViewFields()
-
                     loadCurrentProfileImage()
                 }
         }

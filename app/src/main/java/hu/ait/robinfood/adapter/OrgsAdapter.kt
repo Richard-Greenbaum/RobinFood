@@ -54,7 +54,7 @@ class OrgsAdapter(private val context: Context) : RecyclerView.Adapter<OrgsAdapt
         type: String, shortDescription: String) {
 
         holder.orgNameTv.text = orgName
-        holder.orgAddressTv.text = context.resources.getString(R.string.row_address_tv, address)
+        holder.orgAddressTv.text = address
 
         if (type == context.resources.getString(R.string.restaurant)) {
             holder.shortDescriptionTv2.text =

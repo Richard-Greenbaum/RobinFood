@@ -11,14 +11,7 @@
     <string name="login_failed">Login Failed: %1$s</string>
     <string name="register_success">Account Registration Success</string>
     <string name="register_failed">Account Registration Failed: %1$s</string>
-    <string name="row_address_tv">Address: %1$s</string>
     <string name="row_description_tv">Goods %1$s: %2$s</string>
-
-    <string name="dialog_contact">Contact: </string>
-    <string name="dialog_address">Address: </string>
-    <string name="dialog_description">Description: </string>
-    <string name="dialog_email">Email: </string>
-    <string name="dialog_website">Website: </string>
 
     <string name="btn_email">Send an Email</string>
     <string name="btn_website">Visit Website</string>
@@ -33,15 +26,16 @@
     <string name="details_activity_contact_name">Contact Name (First and Last)</string>
     <string name="details_activity_address">Address of %1$s</string>
     <string name="details_activity_website">Website Link (optional)</string>
-    <string name="details_activity_sd_text">Please provide a list of goods %1$s:</string>
-    <string name="details_activity_ld_text">Please provide any additional information you wish to share:</string>
-    <string name="details_activity_sd_hint">Canned goods, snacks, bread&#8230;</string>
+    <string name="details_activity_sd_text">List of goods %1$s:</string>
+    <string name="details_activity_ld_text">Additional Information:</string>
+    <string name="details_activity_sd_hint">Canned goods, vegetables, bread&#8230;</string>
     <string name="details_activity_visible">Make Profile Visible</string>
     <string name="details_activity_finished">Finished</string>
-
     <string name="edit_details_activity_header">Update Your Details Below</string>
+
     <string name="dialog_profile_details_title">Organization Details</string>
     <string name="dialog_close">Done</string>
+
     <string name="tag_dialog">TAG_DIALOG</string>
     <string name="empty_field_error">This field cannot be empty</string>
     <string name="profile_creation_success">Organization Details Added</string>
