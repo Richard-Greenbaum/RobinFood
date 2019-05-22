@@ -116,6 +116,7 @@ class DetailsActivity : AppCompatActivity() {
             contactNameEt.text.toString(),
             type,
             addressEt.text.toString(),
+            FirebaseAuth.getInstance().currentUser!!.email!!,
             shortDescriptionEt.text.toString(),
             longDescriptionEt.text.toString(),
             visibleCb.isChecked,

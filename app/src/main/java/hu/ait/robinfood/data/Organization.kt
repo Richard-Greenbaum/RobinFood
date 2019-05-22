@@ -6,8 +6,9 @@ data class Organization(
                 var uid: String = "",
                 var orgName: String = "",
                 var contactName: String = "",
-                var type: String = "",    //either "Restaurant" or "Pantry"
+                var type: String = "",    //either "restaurant" or "food pantry"
                 var address: String = "",
+                var email_address: String = "",
                 var shortDescription: String = "",
                 var longDescription: String = "",
                 var visible: Boolean = true,

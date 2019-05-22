@@ -57,8 +57,14 @@ class OrgsActivity : AppCompatActivity() {
 
             if (userOrg.type == resources.getString(R.string.restaurant)) {
                 displayType = resources.getString(R.string.food_pantry)
+                runOnUiThread{
+                    headerTv2.text = getString(R.string.header_text_foodpantry)
+                }
             } else {
                 displayType = resources.getString(R.string.restaurant)
+                runOnUiThread{
+                    headerTv2.text = getString(R.string.header_text_restaurant)
+                }
             }
             initOrgs()
         }

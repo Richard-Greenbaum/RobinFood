@@ -13,6 +13,7 @@ import hu.ait.robinfood.adapter.OrgsAdapter
 import hu.ait.robinfood.data.Organization
 import kotlinx.android.synthetic.main.dialog_profile_details.view.*
 import android.content.ActivityNotFoundException
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
@@ -83,8 +84,12 @@ class ProfileDetailsDialog : DialogFragment() {
             }
 
             btnEmail.setOnClickListener {
+                Log.d("email", "hello")
+
                 val emailIntent = Intent(Intent.ACTION_SENDTO)
-                val email = FirebaseAuth.getInstance().currentUser?.email
+                Log.d("email", organization.toString())
+                val email = organization.email_address
+                Log.d("email", organization.email_address)
                 emailIntent.data = Uri.parse(resources.getString(R.string.email_uri, email))
 
                 try {

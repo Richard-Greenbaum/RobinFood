@@ -45,4 +45,6 @@
     <string name="edit_profile_title">Edit any details below</string>
     <string name="email_uri">mailto: %1$s?&amp;subject=Everybody Eats: Request to Connect</string>
     <string name="email_failed_msg">No email application available on device</string>
+    <string name="header_text_foodpantry">Food pantries to connect with</string>
+    <string name="header_text_restaurant">Restaurants to connect with</string>
 </resources>
