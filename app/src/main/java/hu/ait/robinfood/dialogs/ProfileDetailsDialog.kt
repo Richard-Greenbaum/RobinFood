@@ -1,4 +1,4 @@
-package hu.ait.robinfood
+package hu.ait.robinfood.dialogs
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -7,18 +7,16 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import hu.ait.robinfood.adapter.OrgsAdapter
 import hu.ait.robinfood.data.Organization
 import kotlinx.android.synthetic.main.dialog_profile_details.view.*
 import android.content.ActivityNotFoundException
-import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.android.synthetic.main.dialog_profile_details.*
+import hu.ait.robinfood.GlideApp
+import hu.ait.robinfood.R
+import hu.ait.robinfood.OrgsActivity
 
 
 class ProfileDetailsDialog : DialogFragment() {

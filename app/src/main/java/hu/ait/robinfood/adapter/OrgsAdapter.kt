@@ -3,7 +3,6 @@ package hu.ait.robinfood.adapter
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import hu.ait.robinfood.GlideApp
 import hu.ait.robinfood.OrgsActivity
-import hu.ait.robinfood.ProfileDetailsDialog
+import hu.ait.robinfood.dialogs.ProfileDetailsDialog
 import hu.ait.robinfood.R
 import hu.ait.robinfood.data.Organization
 import kotlinx.android.synthetic.main.row_org.view.*

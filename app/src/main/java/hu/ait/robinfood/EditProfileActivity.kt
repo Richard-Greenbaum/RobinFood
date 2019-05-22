@@ -4,15 +4,14 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import hu.ait.robinfood.GlideApp
 import hu.ait.robinfood.data.Organization
-import kotlinx.android.synthetic.main.activity_details.*
 import kotlinx.android.synthetic.main.activity_edit_profile.*
 import kotlinx.android.synthetic.main.activity_edit_profile.addressEt
 import kotlinx.android.synthetic.main.activity_edit_profile.btnUploadPhoto
@@ -124,7 +123,9 @@ class EditProfileActivity : AppCompatActivity() {
         uploadPhotoIntent.type = "image/*"
         val mimeTypes = arrayListOf<String>("image/jpeg", "image/png")
         uploadPhotoIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
-        startActivityForResult(uploadPhotoIntent, REQUEST_CODE_EDIT)
+        startActivityForResult(uploadPhotoIntent,
+            REQUEST_CODE_EDIT
+        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

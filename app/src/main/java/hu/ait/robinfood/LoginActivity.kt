@@ -3,14 +3,12 @@ package hu.ait.robinfood
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
-import hu.ait.robinfood.data.Organization
 import kotlinx.android.synthetic.main.activity_login.*
 
 

@@ -14,6 +14,12 @@
     <string name="row_address_tv">Address: %1$s</string>
     <string name="row_description_tv">Goods %1$s: %2$s</string>
 
+    <string name="dialog_contact">Contact: </string>
+    <string name="dialog_address">Address: </string>
+    <string name="dialog_description">Description: </string>
+    <string name="dialog_email">Email: </string>
+    <string name="dialog_website">Website: </string>
+
     <string name="btn_email">Send an Email</string>
     <string name="btn_website">Visit Website</string>
     <string name="btn_upload_photo">Upload a Profile Photo</string>
