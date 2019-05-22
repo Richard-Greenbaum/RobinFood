@@ -19,10 +19,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-
-
     }
-
 
     fun registerClick(v: View) {
         if (!isFormValid()) {
@@ -40,12 +37,11 @@ class LoginActivity : AppCompatActivity() {
             )
 
             Toast.makeText(this@LoginActivity,
-                "REGISTER OK", Toast.LENGTH_LONG).show()
-
+                resources.getString(R.string.register_success), Toast.LENGTH_LONG).show()
             startActivity(Intent(this@LoginActivity, OrgTypeActivity::class.java))
         }.addOnFailureListener{
             Toast.makeText(this@LoginActivity,
-                "Register failed ${it.message}", Toast.LENGTH_LONG).show()
+                resources.getString(R.string.register_failed, it.message), Toast.LENGTH_LONG).show()
         }
     }
 
@@ -79,21 +75,21 @@ class LoginActivity : AppCompatActivity() {
             MyThread().start()
 
             Toast.makeText(this@LoginActivity,
-                "Login OK", Toast.LENGTH_LONG).show()
+                resources.getString(R.string.login_success), Toast.LENGTH_LONG).show()
         }.addOnFailureListener{
             Toast.makeText(this@LoginActivity,
-                "Login failed ${it.message}", Toast.LENGTH_LONG).show()
+                resources.getString(R.string.login_failed, it.message), Toast.LENGTH_LONG).show()
         }
     }
 
     private fun isFormValid(): Boolean {
         return when {
             etEmail.text.isEmpty() -> {
-                etEmail.error = "This field can not be empty"
+                etEmail.error = resources.getString(R.string.empty_field_error)
                 false
             }
             etPassword.text.isEmpty() -> {
-                etPassword.error = "This field can not be empty"
+                etPassword.error = resources.getString(R.string.empty_field_error)
                 false
             }
             else -> true

@@ -1,5 +1,7 @@
 package hu.ait.robinfood.data
 
+import java.io.Serializable
+
 data class Organization(
                 var uid: String = "",
                 var orgName: String = "",
@@ -8,4 +10,6 @@ data class Organization(
                 var address: String = "",
                 var shortDescription: String = "",
                 var longDescription: String = "",
-                var visible: Boolean = true)
+                var visible: Boolean = true,
+                var website : String = "",
+                var image : String = "") : Serializable

@@ -14,14 +14,14 @@ class OrgTypeActivity : AppCompatActivity() {
         restaurantBtn.setOnClickListener {
             var intentDetails = Intent()
             intentDetails.setClass(this@OrgTypeActivity, DetailsActivity::class.java)
-            intentDetails.putExtra("TYPE", "Restaurant")
+            intentDetails.putExtra("TYPE", "restaurant")
             startActivity(intentDetails)
         }
 
         foodPantryBtn.setOnClickListener {
             var intentDetails = Intent()
             intentDetails.setClass(this@OrgTypeActivity, DetailsActivity::class.java)
-            intentDetails.putExtra("TYPE", "Food pantry")
+            intentDetails.putExtra("TYPE", "food pantry")
             startActivity(intentDetails)
         }
     }

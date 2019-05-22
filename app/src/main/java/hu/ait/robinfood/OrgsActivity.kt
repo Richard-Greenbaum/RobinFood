@@ -2,10 +2,6 @@ package hu.ait.robinfood
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.design.widget.NavigationView
-import android.support.v4.view.GravityCompat
-import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -24,7 +20,7 @@ class OrgsActivity : AppCompatActivity() {
     lateinit var orgsAdapter: OrgsAdapter
     lateinit var userOrg: Organization
 
-    var display_type = ""
+    lateinit var displayType : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,20 +55,21 @@ class OrgsActivity : AppCompatActivity() {
                 userOrg = document.toObject(Organization::class.java)!!
             } else null
 
-            display_type = if (userOrg!!.type == "Restaurant") "Food pantry" else "Restaurant"
+            if (userOrg.type == resources.getString(R.string.restaurant)) {
+                displayType = resources.getString(R.string.food_pantry)
+            } else {
+                displayType = resources.getString(R.string.restaurant)
+            }
             initOrgs()
-
         }
     }
 
     private fun initOrgs() {
         val db = FirebaseFirestore.getInstance()
 
-        val query = db.collection("orgs").whereEqualTo("type", display_type).whereEqualTo(
-            "visible", true
-        )
-
-
+        val query = db.collection("orgs")
+            .whereEqualTo("type", displayType)
+            .whereEqualTo("visible", true)
 
 
         var allOrgsListener = query.addSnapshotListener(
@@ -102,14 +99,10 @@ class OrgsActivity : AppCompatActivity() {
             })
     }
 
-//    override fun onBackPressed() {
-//        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-//            drawer_layout.closeDrawer(GravityCompat.START)
-//        } else {
-//            FirebaseAuth.getInstance().signOut()
-//            super.onBackPressed()
-//        }
-//    }
+    override fun onBackPressed() {
+        FirebaseAuth.getInstance().signOut()
+        super.onBackPressed()
+    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -120,15 +113,19 @@ class OrgsActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item?.itemId == R.id.nav_logout) {
             FirebaseAuth.getInstance().signOut()
-            finish()
+            val intent = Intent(this@OrgsActivity, LoginActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
         } else if (item?.itemId == R.id.nav_edit_profile) {
-            //Maitreyi writes some super cool code here
+            val editProfileIntent = Intent()
+            val uID = FirebaseAuth.getInstance().currentUser!!.uid
+            editProfileIntent.putExtra("orgID",  uID)
+            editProfileIntent.putExtra("TYPE", userOrg.type)
+            editProfileIntent.setClass(this@OrgsActivity, EditProfileActivity::class.java)
+            startActivity(editProfileIntent)
         }
 
         return super.onOptionsItemSelected(item)
     }
-
-
-
 
 }

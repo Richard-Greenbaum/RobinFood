@@ -1,75 +1,115 @@
 package hu.ait.robinfood
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import hu.ait.robinfood.data.Organization
 import kotlinx.android.synthetic.main.activity_details.*
-import kotlinx.android.synthetic.main.row_org.*
+import android.util.Log
+import com.google.firebase.storage.FirebaseStorage
+
 
 class DetailsActivity : AppCompatActivity() {
 
-    private var type = ""
+    private lateinit var type : String
+    private lateinit var imageField : String
+
+    companion object {
+        const val REQUEST_CODE = 987
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
 
-
-        if (intent.extras.containsKey("TYPE")) {
+        if (intent?.extras!!.containsKey("TYPE")) {
             type = intent.getStringExtra("TYPE")
-            if (type == "Restaurant") {
-                headerTv.text = "${headerTv.text} restaurant"
-                orgNameEt.hint = "Name of your restaurant"
-                addressEt.hint = "${addressEt.hint} restaurant"
-                shortDescriptionTv.text = "Please provide a list of items your restaurant is able to donate"
-                longDescriptionTv.text = "Provide any additional information you wish to share about your restaurant here"
+
+            headerTv.text = resources.getString(R.string.details_activity_header, type)
+            orgNameEt.hint = resources.getString(R.string.details_activity_name, type)
+            addressEt.hint = resources.getString(R.string.details_activity_address, type)
+
+            if (type == "restaurant") {
+                shortDescriptionTv.text = resources.getString(R.string.details_activity_header,
+                    "your restaurant is able to donate")
             }
-            if (type == "Food pantry") {
-                headerTv.text = "${headerTv.text} food pantry"
-                orgNameEt.hint = "${orgNameEt.hint} food pantry"
-                addressEt.hint = "${addressEt.hint} food pantry"
-                shortDescriptionTv.text = "Please provide a list of items or types of items your food pantry accepts"
-                longDescriptionTv.text = "Provide any additional information you wish to share about your food pantry here"
+            if (type == "food pantry") {
+                shortDescriptionTv.text = resources.getString(R.string.details_activity_header,
+                    "your food pantry is willing to accept")
             }
+        }
+
+        btnUploadPhoto.setOnClickListener {
+            initUploadImage()
         }
 
         finishedBtn.setOnClickListener {
-            var ok = true
-            if (!orgNameEt.text.isNotEmpty()) {
-                orgNameEt.error = "This field cannot be empty"
-                ok = false
-            }
-            if (!contactNameEt.text.isNotEmpty()) {
-                contactNameEt.error = "This field cannot be empty"
-                ok = false
-            }
-            if (!addressEt.text.isNotEmpty()) {
-                addressEt.error = "This field cannot be empty"
-                ok = false
-            }
-            if (!shortDescriptionEt.text.isNotEmpty()) {
-                shortDescriptionEt.error = "This field cannot be empty"
-                ok = false
-            }
-
-            if (ok) {
-                uploadOrg()
-                var intentDetails = Intent()
-                intentDetails.setClass(this@DetailsActivity, OrgsActivity::class.java)
-                startActivity(intentDetails)
-            }
+            checkValidDetails()
         }
-
-
-
     }
 
-    fun uploadOrg() {
+    private fun initUploadImage() {
+        val uploadPhotoIntent = Intent(Intent.ACTION_PICK)
+        uploadPhotoIntent.type = "image/*"
+        val mimeTypes = arrayListOf<String>("image/jpeg", "image/png")
+        uploadPhotoIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
+        startActivityForResult(uploadPhotoIntent, REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                REQUEST_CODE -> {
+                    var data = data?.data!!
+                    imageField = data.lastPathSegment!!
+                    orgPhoto.setImageURI(data)
+
+                    val storageRef = FirebaseStorage.getInstance().reference
+                    val imageRef = storageRef.child(imageField)
+                    val uploadTask = imageRef.putFile(data)
+
+                    uploadTask.addOnSuccessListener {
+                        Log.d("IMAGE_UPLOAD", "success")
+                    }.addOnFailureListener {
+                        Log.d("IMAGE_UPLOAD", "fail")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun checkValidDetails() {
+        var ok = true
+        if (orgNameEt.text.isEmpty()) {
+            orgNameEt.error = resources.getString(R.string.empty_field_error)
+            ok = false
+        }
+        if (contactNameEt.text.isEmpty()) {
+            contactNameEt.error = resources.getString(R.string.empty_field_error)
+            ok = false
+        }
+        if (addressEt.text.isEmpty()) {
+            addressEt.error = resources.getString(R.string.empty_field_error)
+            ok = false
+        }
+        if (shortDescriptionEt.text.isEmpty()) {
+            shortDescriptionEt.error = resources.getString(R.string.empty_field_error)
+            ok = false
+        }
+
+        if (ok) {
+            uploadOrg()
+            var intentDetails = Intent()
+            intentDetails.setClass(this@DetailsActivity, OrgsActivity::class.java)
+            startActivity(intentDetails)
+        }
+    }
+
+    private fun uploadOrg() {
         val org = Organization(
             FirebaseAuth.getInstance().currentUser!!.uid,
             orgNameEt.text.toString(),
@@ -78,27 +118,27 @@ class DetailsActivity : AppCompatActivity() {
             addressEt.text.toString(),
             shortDescriptionEt.text.toString(),
             longDescriptionEt.text.toString(),
-            visibleCb.isChecked
+            visibleCb.isChecked,
+            websiteEt.text.toString(),
+            imageField
         )
 
-        var orgsCollection = FirebaseFirestore.getInstance().collection(
-            "orgs"
-        )
 
-        orgsCollection.document(FirebaseAuth.getInstance().currentUser!!.uid).set(
-            org
-        ).addOnSuccessListener {
-            Toast.makeText(
-                this@DetailsActivity,
-                "Org saved", Toast.LENGTH_LONG
-            ).show()
+        var orgsCollection = FirebaseFirestore.getInstance().collection("orgs")
 
-            finish()
-        }.addOnFailureListener {
-            Toast.makeText(
-                this@DetailsActivity,
-                "Error: ${it.message}", Toast.LENGTH_LONG
-            ).show()
-        }
+        orgsCollection.document(FirebaseAuth.getInstance().currentUser!!.uid).set(org)
+            .addOnSuccessListener {
+                Toast.makeText(
+                    this@DetailsActivity,
+                    resources.getString(R.string.profile_creation_success), Toast.LENGTH_LONG
+                ).show()
+
+                finish()
+            }.addOnFailureListener {
+                Toast.makeText(
+                    this@DetailsActivity,
+                    resources.getString(R.string.profile_creation_fail, it.message), Toast.LENGTH_LONG
+             ).show()
+            }
     }
 }
