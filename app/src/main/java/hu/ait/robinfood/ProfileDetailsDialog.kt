@@ -28,6 +28,7 @@ class ProfileDetailsDialog : DialogFragment() {
     private lateinit var profileAddress: TextView
     private lateinit var profileShortDes: TextView
     private lateinit var profileLongDes: TextView
+    private lateinit var emailAddress: TextView
     private lateinit var btnEmail: ImageView
     private lateinit var btnWebsite: ImageView
     private lateinit var profileImage: ImageView
@@ -58,6 +59,7 @@ class ProfileDetailsDialog : DialogFragment() {
         profileContact = rootView.profileContact
         profileShortDes = rootView.profileShortDescription
         profileLongDes = rootView.profileLongDescription
+        emailAddress = rootView.emailAddress
         btnEmail = rootView.btnEmail
         btnWebsite = rootView.btnWebsite
         profileImage = rootView.profileImage
@@ -74,6 +76,7 @@ class ProfileDetailsDialog : DialogFragment() {
             profileContact.text = organization.contactName
             profileShortDes.text = organization.shortDescription
             profileLongDes.text = organization.longDescription
+            emailAddress.text = organization.emailAddress
 
             if (organization.image != "") {
                 var imgRef = FirebaseStorage.getInstance().reference.child(organization.image)
@@ -88,8 +91,8 @@ class ProfileDetailsDialog : DialogFragment() {
 
                 val emailIntent = Intent(Intent.ACTION_SENDTO)
                 Log.d("email", organization.toString())
-                val email = organization.email_address
-                Log.d("email", organization.email_address)
+                val email = organization.emailAddress
+                Log.d("email", organization.emailAddress)
                 emailIntent.data = Uri.parse(resources.getString(R.string.email_uri, email))
 
                 try {

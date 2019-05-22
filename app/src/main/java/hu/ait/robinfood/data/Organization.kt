@@ -8,7 +8,7 @@ data class Organization(
                 var contactName: String = "",
                 var type: String = "",    //either "restaurant" or "food pantry"
                 var address: String = "",
-                var email_address: String = "",
+                var emailAddress: String = "",
                 var shortDescription: String = "",
                 var longDescription: String = "",
                 var visible: Boolean = true,

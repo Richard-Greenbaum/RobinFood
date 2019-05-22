@@ -42,7 +42,7 @@ class OrgsAdapter(
     override fun getItemCount() = orgsList.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val (uid, orgName, contactName, type, address, shortDescription,
+        val (uid, orgName, contactName, type, address, emailAddress, shortDescription,
             longDescription, visible, website, image) = orgsList[holder.adapterPosition]
 
         if (image != "") {
